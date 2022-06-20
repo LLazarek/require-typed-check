@@ -7,9 +7,10 @@
 )
 
 (require
-  (for-syntax racket/base syntax/location syntax/parse require-typed-check/private/log)
-  (only-in typed/racket require/typed)
-  (rename-in typed/racket/no-check [require/typed require/typed/no-check]))
+ (for-syntax racket/base syntax/location syntax/parse require-typed-check/private/log
+             (only-in racket/format ~a))
+ (only-in typed/racket require/typed)
+ (rename-in typed/racket/no-check [require/typed require/typed/no-check]))
 
 ;; =============================================================================
 
@@ -126,7 +127,8 @@
         #:attr req #`(require/typed #,lib (#:opaque oc.ty oc.pred . oc.opt)))
       (pattern (~var strc struct-clause)
         #:attr ann #'#f
-        #:attr req #'#f)
+        #:with struct-name-pat (datum->syntax #f (regexp (~a "^" (syntax->datum (attribute strc.nm)) "[0-9]+$")))
+        #:attr req #`(require racket/require (matching-identifiers-in struct-name-pat #,lib)))
         ; TODO check struct annotations
         ;#:attr spec
         ;#`(require-typed-struct strc.nm (strc.tvar ...)
