@@ -103,9 +103,10 @@
     #:attributes (nm type (body 1) (constructor-parts 1) (tvar 1))
     (pattern [(~or (~datum struct) #:struct)
               (~optional (~seq (tvar ...)) #:defaults ([(tvar 1) '()]))
-              nm:opt-parent (body ...)
+              nm*:opt-parent (body ...)
               (~var opts (struct-opts #'nm.nm))]
       #:with (constructor-parts ...) #'opts.ctor-value
+      #:with nm (attribute nm*.nm)
       #:attr type #'opts.type))
 
   (define-syntax-class signature-clause
